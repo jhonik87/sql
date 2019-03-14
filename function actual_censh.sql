@@ -1,4 +1,4 @@
-drop function actual_censh(NCHAR(20),INTEGER,CHAR(2));
+﻿drop function actual_censh(NCHAR(20),INTEGER,CHAR(2));
 create function actual_censh(coden NCHAR(20),postindexn INTEGER,sektorn CHAR(2)) returning DECIMAL(32,5);
 define price,cenon,censhn,k DECIMAL(32,5);
 define matn CHAR(15);

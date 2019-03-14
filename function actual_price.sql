@@ -1,6 +1,6 @@
-drop function actual_price(NCHAR(20),INTEGER,CHAR(2));
+п»їdrop function actual_price(NCHAR(20),INTEGER,CHAR(2));
 create function actual_price(coden NCHAR(20),postindexn INTEGER,sektorn CHAR(2)) returning DECIMAL(32,5);
---функция расчета цены товара на текущую дату
+--С„СѓРЅРєС†РёСЏ СЂР°СЃС‡РµС‚Р° С†РµРЅС‹ С‚РѕРІР°СЂР° РЅР° С‚РµРєСѓС‰СѓСЋ РґР°С‚Сѓ
 define price,cenon,censhn,k DECIMAL(32,5);
 define matn CHAR(15);
 define vin NCHAR(1);
@@ -19,7 +19,7 @@ select mat,vi,kvc,price1,price2,eir,rec into matn,vin,kvcn,price1n,price2n,eirn,
 if price1n is not null then
 let price=price1n;
 end if;
--- находим цену товара и штуцера в зависимости от покупателя
+-- РЅР°С…РѕРґРёРј С†РµРЅСѓ С‚РѕРІР°СЂР° Рё С€С‚СѓС†РµСЂР° РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ РїРѕРєСѓРїР°С‚РµР»СЏ
 if ((price1n=0) and (price2n=0)) then
   begin
     select max(dtvoc) into dtvocn from k_cetmc where ki8=matn and VI=vin and KVC=kvcn and date(dtvoc)<=date(data) and postindex=postindexn;
@@ -44,7 +44,7 @@ if ((price1n=0) and (price2n=0)) then
     end if;    
   end;
 end if;
---некондиция
+--РЅРµРєРѕРЅРґРёС†РёСЏ
 if sektorn='56' then
   begin
     let cenon=cenon*0.6;
@@ -52,7 +52,7 @@ if sektorn='56' then
   end; 
 end if;
 
---расчет цены штуцера в зависимости от единиц измерения
+--СЂР°СЃС‡РµС‚ С†РµРЅС‹ С€С‚СѓС†РµСЂР° РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ РµРґРёРЅРёС† РёР·РјРµСЂРµРЅРёСЏ
 if censhn>0 then
   begin
     let k=1;

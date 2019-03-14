@@ -1,4 +1,4 @@
-drop procedure copy_o_zag_o_spec(int,int,NCHAR(8));
+п»їdrop procedure copy_o_zag_o_spec(int,int,NCHAR(8));
 create procedure copy_o_zag_o_spec(idnn int,priznak int, ownern NCHAR(8));
 DEFINE zaknumn NCHAR(9);
 DEFINE idnnew int;
@@ -6,17 +6,17 @@ DEFINE ndsnew int;
 DEFINE resp,post int;
 DEFINE data DATETIME YEAR to SECOND;
 DEFINE sekt CHAR(2);
---присваиваем новый уникальный номер заказа
+--РїСЂРёСЃРІР°РёРІР°РµРј РЅРѕРІС‹Р№ СѓРЅРёРєР°Р»СЊРЅС‹Р№ РЅРѕРјРµСЂ Р·Р°РєР°Р·Р°
 SELECT substr(MAX(nomerz),1,1)||substr((substr(MAX(nomerz),2,4)+1),1,4)||'/'||substr(year(today),3,4) into zaknumn FROM o_Zag;
 if not EXISTS(select idn from o_zag where idn=idnn) then  
-RAISE EXCEPTION  -746, 0, ' нельзя скопировать. Отсутствует заказ! ';  
+RAISE EXCEPTION  -746, 0, ' РЅРµР»СЊР·СЏ СЃРєРѕРїРёСЂРѕРІР°С‚СЊ. РћС‚СЃСѓС‚СЃС‚РІСѓРµС‚ Р·Р°РєР°Р·! ';  
 end if; 
 
 select (current::DATETIME YEAR to SECOND) into data FROM table(SET{1});
 
-if priznak=0 then --не меняем цену и ндс
+if priznak=0 then --РЅРµ РјРµРЅСЏРµРј С†РµРЅСѓ Рё РЅРґСЃ
 begin
-insert into o_zag --вставка в таблицу заказы
+insert into o_zag --РІСЃС‚Р°РІРєР° РІ С‚Р°Р±Р»РёС†Сѓ Р·Р°РєР°Р·С‹
   (viddoc,nomerz,nomers,kodz,kodp,
    dateoz,dateiz,datevs,summaz,summak,
    summan,sumopl,vidcalcnds,vidcalctn,nprod,
@@ -45,8 +45,8 @@ select
    '',igk,datad,idn_o_zagd,idn_o_zagk,
    gosnum,data_gosnum
 from o_zag where idn=idnn;
-SELECT idn into idnnew FROM o_Zag where nomerz=zaknumn; --выбираем последний заказ
---вставка в таблицу спецификации
+SELECT idn into idnnew FROM o_Zag where nomerz=zaknumn; --РІС‹Р±РёСЂР°РµРј РїРѕСЃР»РµРґРЅРёР№ Р·Р°РєР°Р·
+--РІСЃС‚Р°РІРєР° РІ С‚Р°Р±Р»РёС†Сѓ СЃРїРµС†РёС„РёРєР°С†РёРё
 insert into o_spec(
    orderidn,nomerpp,group,code,tsort,
    tol,dlina,shir,edink,kolz1,
@@ -66,15 +66,15 @@ select
 from o_spec where orderidn=idnn;
 end;
 end if;
-if priznak=1 then --меняем цену и ндс
+if priznak=1 then --РјРµРЅСЏРµРј С†РµРЅСѓ Рё РЅРґСЃ
 begin
 select res,postindex,c.sektor into resp,post,sekt from k_corp a,k_vil b,o_zag c where a.vilnum=b.code and a.plant=c.kodp and c.idn=idnn;
 if resp=1 then
-let ndsnew=20;     --если Россия то НДС 20%
-else let ndsnew=0; --иначе 0%
+let ndsnew=20;     --РµСЃР»Рё Р РѕСЃСЃРёСЏ С‚Рѕ РќР”РЎ 20%
+else let ndsnew=0; --РёРЅР°С‡Рµ 0%
 end if;
 
-insert into o_zag  --вставка в таблицу заказы
+insert into o_zag  --РІСЃС‚Р°РІРєР° РІ С‚Р°Р±Р»РёС†Сѓ Р·Р°РєР°Р·С‹
   (viddoc,nomerz,nomers,kodz,kodp,
    dateoz,dateiz,datevs,summaz,summak,
    summan,sumopl,vidcalcnds,vidcalctn,nprod,
@@ -104,7 +104,7 @@ select
    gosnum,data_gosnum
 from o_zag where idn=idnn;
 SELECT idn into idnnew FROM o_Zag where nomerz=zaknumn;
---вставка в таблицу спецификации с использование функций actual_price(общая цена),actual_ceno(цена товара),actual_censh(цена штуцера)
+--РІСЃС‚Р°РІРєР° РІ С‚Р°Р±Р»РёС†Сѓ СЃРїРµС†РёС„РёРєР°С†РёРё СЃ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµ С„СѓРЅРєС†РёР№ actual_price(РѕР±С‰Р°СЏ С†РµРЅР°),actual_ceno(С†РµРЅР° С‚РѕРІР°СЂР°),actual_censh(С†РµРЅР° С€С‚СѓС†РµСЂР°)
 insert into o_spec(
    orderidn,nomerpp,group,code,tsort,
    tol,dlina,shir,edink,kolz1,
@@ -122,10 +122,10 @@ select
    vidis,naznpost,kvc,ki8,rek,
    eir,actual_price(code,post,sekt),przzakrzak
 from o_spec where orderidn=idnn;
-update o_spec set summa=price1*kolz2 where orderidn=idnnew; --расчет суммы
---расчет суммы скидки с учетом тары
+update o_spec set summa=price1*kolz2 where orderidn=idnnew; --СЂР°СЃС‡РµС‚ СЃСѓРјРјС‹
+--СЂР°СЃС‡РµС‚ СЃСѓРјРјС‹ СЃРєРёРґРєРё СЃ СѓС‡РµС‚РѕРј С‚Р°СЂС‹
 update o_spec set sumsk=(case when group<>'0T00' then (summa+summa*((100+torgnac)/100)*(nds/100))*procsk/100 else 0 end) where orderidn=idnnew;
--- обновляем итоговую сумму заказа и налогов
+-- РѕР±РЅРѕРІР»СЏРµРј РёС‚РѕРіРѕРІСѓСЋ СЃСѓРјРјСѓ Р·Р°РєР°Р·Р° Рё РЅР°Р»РѕРіРѕРІ
 update o_zag set 
 summaz=(select sum((summa*(100+torgnac)/100)*nds/100)+sum(summa*(100+torgnac)/100) from o_spec where orderidn=idnnew),
 summan=(select sum((summa*(100+torgnac)/100)*nds/100) from o_spec where orderidn=idnnew),
